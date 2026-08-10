@@ -10,8 +10,8 @@ read in one sitting and changed.
 
 ## Getting started
 
-You do not need to fork anything to *use* a portal. Choosing this template in Solar Assistant gives
-you a working portal in your own branding, and most partners never need more than that.
+You do not need to fork anything to *use* a portal. Choosing this template in SolarAssistant gives
+you a working portal in your own branding, and most companies never need more than that.
 
 Fork it when you want to change something — the wording, the layout, an extra page:
 
@@ -25,7 +25,7 @@ Fork it when you want to change something — the wording, the layout, an extra 
    If you do not know your organization id, start at
    [solar-assistant.io/user](https://solar-assistant.io/user), click your organization, then
    **Cloud portal**. You choose the repository once; after that it is yours.
-3. **Set your branding in Solar Assistant**, not in the code. Your name, colours and logo live on
+3. **Set your branding in SolarAssistant**, not in the code. Your name, colours and logo live on
    your organization record and are substituted into the pages — see [Tokens](#tokens). There is
    nothing company-specific to edit here, and a logo is required before a portal can be enabled.
 4. **Edit, commit, push.** A push changes nothing on its own: you stage a revision to preview it and
@@ -48,8 +48,9 @@ components, loaded from one script tag:
 `<sa-sign-in>`, `<sa-register>`, `<sa-sites>` and `<sa-user>` are those components. They talk to the
 API from the browser, so there is no server of yours involved anywhere.
 
-They come from the **SolarAssistant Web Integration Kit**, published at [github.com/Solar-
-Assistant/js_solar_assistant](https://github.com/Solar-Assistant/js_solar_assistant) and as
+They come from the **SolarAssistant Web Integration Kit** —
+[github.com/Solar-Assistant/js_solar_assistant](https://github.com/Solar-Assistant/js_solar_assistant),
+published as
 [`@solar-assistant/components`](https://www.npmjs.com/package/@solar-assistant/components) and
 [`@solar-assistant/api`](https://www.npmjs.com/package/@solar-assistant/api). If you want to go
 further than editing these pages — build the portal with a framework, or put monitoring into a site
@@ -160,9 +161,9 @@ Things worth knowing:
 - **Nothing builds your site for you.** The files are served exactly as committed, so if a framework
   produces `dist/`, that directory has to be committed too. Most frameworks put it in `.gitignore`
   by default, so this is the step people miss. If the directory you name turns out to be empty, you
-  get 404s rather than your old pages back: Solar Assistant will not quietly serve the repository
+  get 404s rather than your old pages back: SolarAssistant will not quietly serve the repository
   root instead, because that would publish your sources at your customers' address.
-- **A missing or invalid file is reported to you, not to your customers.** Solar Assistant checks it
+- **A missing or invalid file is reported to you, not to your customers.** SolarAssistant checks it
   when you choose a template and when you save a staging revision, so a mistake here surfaces while
   you are looking at it, rather than as a broken portal somebody else discovers.
 - **`/dist` and `dist` mean the same thing.** A leading slash is fine; the root is always relative to
@@ -177,7 +178,7 @@ already works.
 ## `assets/logo.svg`
 
 Referenced but **deliberately absent** from this repository. A logo differs for every company, and a shared
-template must not carry one. Solar Assistant serves that path from the organization's stored
+template must not carry one. SolarAssistant serves that path from the organization's stored
 logo.
 
 Two consequences worth knowing:
@@ -205,5 +206,5 @@ Request paths are unchanged by the root: `/sign_in`, not `/dist/sign_in`.
 
 ## Publishing
 
-A push does not change any live portal. Solar Assistant pins each organization to a revision;
+A push does not change any live portal. SolarAssistant pins each organization to a revision;
 a new commit becomes visible only when someone refreshes staging and promotes it.
