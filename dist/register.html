@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ org_name }}</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+  <!-- Brand colours, and the one line every page in this portal must carry.
+       It has to come after the stylesheet link so that it wins, and each page
+       needs its own copy: substitution runs on .html files only, so these
+       values cannot be moved into assets/style.css. A page missing this line
+       renders in the neutral fallback palette while its siblings are branded,
+       which reads as a bug rather than as a missing setting. -->
+  <style>:root { --sa-primary: {{ org_primary }}; --sa-accent: {{ org_accent }}; }</style>
+  <script>
+    if (navigator.userAgent.includes('SolarAssistant'))
+      document.addEventListener('DOMContentLoaded', () => {
+        document.body.classList.add('embedded')
+        document.querySelectorAll('sa-sign-in, sa-register, sa-sites, sa-user')
+          .forEach(el => el.classList.add('embedded'))
+      })
+  </script>
+  <script type="module" src="https://cdn.solar-assistant.io/js/solar-assistant.js"></script>
+</head>
+<body>
+  <header class="site-header hide-android">
+    <div class="header-inner">
+      <a class="header-logo" href="/sign_in">
+        <!-- This repository contains no logo file, on purpose: one template is
+             served to every partner. The path below is filled from your
+             organization's stored logo, so leave it exactly as written. -->
+        <img src="/assets/logo.svg" alt="{{ org_name }}" />
+      </a>
+    </div>
+  </header>
+  <main class="centered">
+    <h1>Create account</h1>
+    <!-- The organization-id below is what binds this form to your account, and
+         it is the single most dangerous thing in the template to edit. A wrong
+         value does not look wrong: every page still renders correctly while
+         registration quietly creates accounts against somebody else's
+         organization. Leave the token as it is. It belongs on this page and on
+         sign_in.html, and on no other page in the portal. -->
+    <sa-register organization-id="{{ org_id }}" sign-in="/sign_in"></sa-register>
+  </main>
+</body>
+</html>

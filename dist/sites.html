@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ org_name }}</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+  <!-- Brand colours, and the one line every page in this portal must carry.
+       It has to come after the stylesheet link so that it wins, and each page
+       needs its own copy: substitution runs on .html files only, so these
+       values cannot be moved into assets/style.css. A page missing this line
+       renders in the neutral fallback palette while its siblings are branded,
+       which reads as a bug rather than as a missing setting. -->
+  <style>:root { --sa-primary: {{ org_primary }}; --sa-accent: {{ org_accent }}; }</style>
+  <script>
+    if (navigator.userAgent.includes('SolarAssistant'))
+      document.addEventListener('DOMContentLoaded', () => {
+        document.body.classList.add('embedded')
+        document.querySelectorAll('sa-sign-in, sa-sites, sa-user')
+          .forEach(el => el.classList.add('embedded'))
+      })
+  </script>
+  <script type="module" src="https://cdn.solar-assistant.io/js/solar-assistant.js"></script>
+</head>
+<body>
+  <header class="site-header hide-android">
+    <div class="header-inner">
+      <a class="header-logo" href="/sites">
+        <!-- This repository contains no logo file, on purpose: one template is
+             served to every partner. The path below is filled from your
+             organization's stored logo, so leave it exactly as written. -->
+        <img src="/assets/logo.svg" alt="{{ org_name }}" />
+      </a>
+      <nav class="header-nav">
+        <a href="/sites">Sites</a>
+        <span class="header-separator" aria-hidden="true"></span>
+        <a class="header-account" href="/user" aria-label="Account">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="28" height="28">
+            <circle cx="32" cy="32" r="31" fill="var(--sa-accent)" />
+            <path fill="var(--sa-primary)" d="M56.877,50.4748a31.0647,31.0647,0,0,0-49.7651-.0156,30.9669,30.9669,0,0,0,49.7651.0156Z" />
+            <circle cx="32" cy="22" r="12" fill="var(--sa-primary)" />
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <sa-sites sign-in="/sign_in"></sa-sites>
+  </main>
+</body>
+</html>

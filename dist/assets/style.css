@@ -1,0 +1,110 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scrollbar-gutter: stable; }
+
+/* Brand colours are per-organization and arrive from the page, not from here.
+   Each page's <head> sets --sa-primary / --sa-accent on :root after this file
+   loads, so those win. The values below are the neutral fallback used when an
+   organization has no colours set, and when the template is viewed outside the
+   portal (straight from git, or in a local preview). Keep them brand-neutral:
+   this stylesheet is shared by every partner and is cached hard. */
+:root {
+  --sa-primary: #475569;
+  --sa-accent: rgba(71, 85, 105, 0.1);
+  --sa-border: #e3e5e6;
+  --sa-radius: 6px;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #f9fafb;
+  color: #111827;
+}
+
+/* Auth transfer: hide the page header before first paint until the token is
+   exchanged and we redirect. The `auth-transfer` class is set on <html>
+   before first paint (see sign_in.html). The component shows its own spinner. */
+.auth-transfer .site-header { display: none; }
+
+main {
+  max-width: 960px;
+  margin: 48px auto;
+  padding: 0 24px;
+}
+
+main.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.site-header {
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 16px 0;
+}
+
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+/* The logo is sized by height so that headers line up whatever shape a partner
+   uploads. max-width is a guard for an unusually wide one: it keeps a banner
+   from crowding out the navigation, and a logo narrower than the cap is
+   untouched by it. */
+.header-logo img {
+  display: block;
+  height: 56px;
+  width: auto;
+  max-width: 240px;
+}
+
+.header-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.header-nav a {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+  font-size: 1.1em;
+}
+
+.header-nav a:hover {
+  color: var(--sa-primary);
+}
+
+.header-separator {
+  width: 1px;
+  height: 1.3em;
+  background: #c9cbcb;
+  flex-shrink: 0;
+}
+
+.header-account {
+  display: flex;
+  color: var(--sa-primary);
+}
+
+.header-account svg {
+  display: block;
+}
+
+body.embedded .hide-android {
+  display: none;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
