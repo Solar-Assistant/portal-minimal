@@ -1,11 +1,12 @@
-# portal-minimal — the minimal partner portal template
+# A minimal SolarAssistant customer portal
 
-A complete, brand-neutral monitoring portal for your customers: they sign in, see their sites, and
-manage their account, under your name and your colours. Solar Assistant serves this repository
-directly — a request path maps onto a file here, and your organization's own details are substituted
-into each page as it is served. Nothing in this repository is specific to any partner, which is why
-it is safe to start from. It is deliberately minimal: the smallest complete portal, meant to be
-read and changed.
+Your customers sign in, see their sites, and manage their account — under your name, your colours
+and your logo. SolarAssistant serves this repository directly: a request path maps onto a file
+here, and your organization's own details are substituted into each page as it is served.
+
+Nothing in it is specific to any company, and there is no branding to strip out — which is what
+makes it safe to start from. It is deliberately the smallest complete portal there is, meant to be
+read in one sitting and changed.
 
 ## Getting started
 
@@ -26,7 +27,7 @@ Fork it when you want to change something — the wording, the layout, an extra 
    **Cloud portal**. You choose the repository once; after that it is yours.
 3. **Set your branding in Solar Assistant**, not in the code. Your name, colours and logo live on
    your organization record and are substituted into the pages — see [Tokens](#tokens). There is
-   nothing partner-specific to edit here, and a logo is required before a portal can be enabled.
+   nothing company-specific to edit here, and a logo is required before a portal can be enabled.
 4. **Edit, commit, push.** A push changes nothing on its own: you stage a revision to preview it and
    publish when you are happy. See [Publishing](#publishing).
 
@@ -175,7 +176,7 @@ already works.
 
 ## `assets/logo.svg`
 
-Referenced but **deliberately absent** from this repository. A logo is per-partner, and a shared
+Referenced but **deliberately absent** from this repository. A logo differs for every company, and a shared
 template must not carry one. Solar Assistant serves that path from the organization's stored
 logo.
 
