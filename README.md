@@ -36,6 +36,36 @@ it, and publish. It is the one page to bookmark.
 
 Fuller help pages are coming. For now this README is the documentation.
 
+## Working on it locally
+
+**The faithful preview is staging**, not localhost. Commit, push, then refresh and preview from your
+**Cloud portal** page. That is the only place your colours, logo and organization id are actually
+substituted, so it is the only place sign-in works and the only place the pages look like what your
+customers get.
+
+For quick work on layout and styling, serve `dist/` with any static server **that serves `/sign_in`
+as `sign_in.html`**:
+
+```bash
+npx serve dist
+```
+
+That detail matters more than it sounds. `python3 -m http.server` does *not* do extensionless URLs,
+and since `index.html` immediately redirects to `/sign_in`, the first thing you see is a 404 — which
+looks like a broken template and is not one.
+
+Three things will differ from the real thing, all expected:
+
+- **No branding.** Tokens are only substituted when SolarAssistant serves the page, so the tab reads
+  `{{ org_name }}` and the colours fall back to the neutral palette in `dist/assets/style.css` —
+  exactly what an organization with no colours set would see.
+- **No logo.** `/assets/logo.svg` 404s locally, because it comes from your organization rather than
+  from this repository.
+- **No sign-in**, because `organization-id` is still `{{ org_id }}` rather than a number. If you want
+  to exercise it, put your real organization id into `dist/sign_in.html` while you work — the API
+  accepts requests from any origin, so sign-in genuinely works from localhost. Don't commit that
+  change: your branding should keep coming from your organization record, not from the files.
+
 ## What it is built on
 
 The pages are plain HTML — no framework, no build step. The moving parts are the SolarAssistant web
