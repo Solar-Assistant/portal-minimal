@@ -38,33 +38,23 @@ Fuller help pages are coming. For now this README is the documentation.
 
 ## Working on it locally
 
-**The faithful preview is staging**, not localhost. Commit, push, then refresh and preview from your
-**Cloud portal** page. That is the only place your colours, logo and organization id are actually
-substituted, so it is the only place sign-in works and the only place the pages look like what your
-customers get.
+**Preview on staging.** Commit, push, then refresh and preview from your **Cloud portal** page. That
+is where your name, colours, logo and organization id are substituted into the pages, so it is the
+only place they look like what your customers get — and the only place sign-in works.
 
-For quick work on layout and styling, serve `dist/` with any static server **that serves `/sign_in`
-as `sign_in.html`**:
+You can also serve `dist/` yourself while working on layout, with any static server **that serves
+`/sign_in` as `sign_in.html`**. That requirement is easy to miss: `python3 -m http.server` does not
+do extensionless URLs, so `/` redirects to `/sign_in` and the first thing you see is a 404 that looks
+like a broken template.
 
-```bash
-npx serve dist
-```
+Expect it to look unbranded. Nothing substitutes tokens locally, so the tab reads `{{ org_name }}`,
+the colours fall back to the neutral palette in `dist/assets/style.css`, and sign-in cannot work
+because `organization-id` is still a token rather than a number. It shows you structure, not
+branding.
 
-That detail matters more than it sounds. `python3 -m http.server` does *not* do extensionless URLs,
-and since `index.html` immediately redirects to `/sign_in`, the first thing you see is a 404 — which
-looks like a broken template and is not one.
-
-Three things will differ from the real thing, all expected:
-
-- **No branding.** Tokens are only substituted when SolarAssistant serves the page, so the tab reads
-  `{{ org_name }}` and the colours fall back to the neutral palette in `dist/assets/style.css` —
-  exactly what an organization with no colours set would see.
-- **No logo.** `/assets/logo.svg` 404s locally, because it comes from your organization rather than
-  from this repository.
-- **No sign-in**, because `organization-id` is still `{{ org_id }}` rather than a number. If you want
-  to exercise it, put your real organization id into `dist/sign_in.html` while you work — the API
-  accepts requests from any origin, so sign-in genuinely works from localhost. Don't commit that
-  change: your branding should keep coming from your organization record, not from the files.
+**If a page looks slate grey on your real portal, that is not a fault.** It means no primary colour
+is set on your organization yet — set one on your **Cloud portal** page and it appears. Grey is the
+honest default rather than a failure.
 
 ## What it is built on
 
@@ -100,6 +90,7 @@ dist/                  everything below is served
   sites.html
   user.html
   assets/style.css
+  assets/favicon.svg
 ```
 
 So `/sign_in` is `dist/sign_in.html`, and this README is not reachable on your portal. See
@@ -113,8 +104,8 @@ Four tokens are replaced, **in `.html` files only**:
 |---|---|---|
 | `{{ org_id }}` | the organization's numeric id | `organization-id` on the components |
 | `{{ org_name }}` | the organization's name, HTML-escaped | page `<title>`, logo `alt` text |
-| `{{ org_primary }}` | its brand colour | `--sa-primary` |
-| `{{ org_accent }}` | its soft tint | `--sa-accent` |
+| `{{ org_primary }}` | its primary colour, or neutral slate if none is set | `--sa-primary` |
+| `{{ org_accent }}` | the same colour at 10% — a soft tint, derived for you | `--sa-accent` |
 
 An unknown token is left visible rather than blanked, so a typo shows up as `{{ org_nmae }}` on
 the page instead of silently rendering nothing. It also writes a warning to the server log on
