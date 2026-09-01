@@ -147,6 +147,8 @@ dist/                  everything below is served
   register.html
   sites.html
   user.html
+  terms.html
+  privacy.html
   assets/style.css
   assets/favicon.svg
 ```
@@ -286,8 +288,20 @@ Two consequences worth knowing:
 | `dist/register.html` | `<sa-register>` |
 | `dist/sites.html` | `<sa-sites>` — the site list and site detail |
 | `dist/user.html` | `<sa-user>` — account details |
+| `dist/terms.html` | your terms, framed from your own domain — see below |
+| `dist/privacy.html` | the SolarAssistant privacy policy, framed the same way |
 
 Request paths are unchanged by the root: `/sign_in`, not `/dist/sign_in`.
+
+**The two legal pages are wrappers, not documents.** Each is an ordinary page of yours — your
+header, your heading, your styling — around an `<iframe>` that SolarAssistant serves **on your own
+domain**, so a customer reading your terms never leaves your site. The registration form links
+`/terms`, so the page has to exist: delete it and your customers meet a 404 at the moment they are
+creating an account.
+
+If you would rather write your own terms, replace the frame with your text and keep the page. Your
+terms are your document — we supply one so that you have something correct to start from, and the
+obligations it has to satisfy live in your partner agreement, not in this repository.
 
 ## Publishing
 

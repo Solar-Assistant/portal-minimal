@@ -108,3 +108,7 @@ h1 {
   font-weight: 600;
   margin-bottom: 24px;
 }
+
+/* Legal documents are framed from your own domain, so they inherit nothing from
+   this stylesheet — the frame is sized to its content by the page that holds it. */
+iframe.legal { width: 100%; border: 0; min-height: 60vh; }

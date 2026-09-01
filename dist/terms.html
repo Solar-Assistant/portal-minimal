@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ org_name }}</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <!-- Brand colours, and the one line every page in this portal must carry.
+       It has to come after the stylesheet link so that it wins, and each page
+       needs its own copy: substitution runs on .html files only, so these
+       values cannot be moved into assets/style.css. A page missing this line
+       renders in the neutral fallback palette while its siblings are branded,
+       which reads as a bug rather than as a missing setting. -->
+  <style>:root { --sa-primary: {{ org_primary }}; --sa-accent: {{ org_accent }}; }</style>
+  <script>
+    if (navigator.userAgent.includes('SolarAssistant'))
+      document.addEventListener('DOMContentLoaded', () => document.body.classList.add('embedded'))
+  </script>
+</head>
+<body>
+  <header class="site-header hide-android">
+    <div class="header-inner">
+      <a class="header-logo" href="/sign_in">
+        <!-- This repository contains no logo file, on purpose: one template is
+             served to every partner. The path below is filled from your
+             organization's stored logo, so leave it exactly as written. -->
+        <img src="/assets/logo.svg" alt="{{ org_name }}" />
+      </a>
+    </div>
+  </header>
+  <main>
+    <h1>Terms and conditions</h1>
+    <!-- The document itself is served by SolarAssistant on your own domain, so
+         nothing here leaves your site. The page around it is yours: change the
+         heading, add your header and footer, style it however you like. -->
+    <iframe class="legal" src="/api/v1/legal/portal/terms" title="Terms and conditions"></iframe>
+  </main>
+  <script>
+    // Same-origin, so the frame can be sized to its content instead of scrolling.
+    const frame = document.querySelector('iframe.legal')
+    const fit = () => {
+      const doc = frame.contentDocument
+      if (doc) frame.style.height = doc.documentElement.scrollHeight + 'px'
+    }
+    frame.addEventListener('load', fit)
+    addEventListener('resize', fit)
+  </script>
+</body>
+</html>
