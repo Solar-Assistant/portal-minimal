@@ -10,13 +10,19 @@ read in one sitting and changed.
 
 ## Getting started
 
-You do not need to fork anything to *use* a portal. Choosing this template in SolarAssistant gives
+You do not need to copy anything to *use* a portal. Choosing this template in SolarAssistant gives
 you a working portal in your own branding, and most companies never need more than that.
 
-Fork it when you want to change something — the wording, the layout, an extra page:
+Take a copy when you want to change something — the wording, the layout, an extra page:
 
-1. **Fork this repository** into your own GitHub account or organization.
-2. **Connect the fork** on your organization's **Cloud portal** page:
+1. **Make your own repository from this one** with GitHub's **Use this template** button, which is
+   where the button on your Cloud portal page sends you. Note that it *generates* a repository
+   rather than forking one, deliberately: GitHub ties a fork's visibility to the repository it came
+   from, so **a fork of a public repository can never be made private**. Generating gives you a
+   repository you are free to keep private. The cost is that it starts with no history in common
+   with ours — see [Staying up to date](#staying-up-to-date), which is worth reading before you
+   have made many changes.
+2. **Connect that repository** on your organization's **Cloud portal** page:
 
    ```
    https://solar-assistant.io/organizations/<your-organization-id>/portal
@@ -27,7 +33,8 @@ Fork it when you want to change something — the wording, the layout, an extra 
    **Cloud portal**. You choose the repository once; after that it is yours.
 3. **Set your branding in SolarAssistant**, not in the code. Your name, colours and logo live on
    your organization record and are substituted into the pages — see [Tokens](#tokens). There is
-   nothing company-specific to edit here, and a logo is required before a portal can be enabled.
+   nothing company-specific to edit here. Upload a logo too — without one you get a plain wordmark
+   built from your name.
 4. **Edit, commit, push.** A push changes nothing on its own: you stage a revision to preview it and
    publish when you are happy. See [Publishing](#publishing).
 
@@ -38,23 +45,74 @@ Fuller help pages are coming. For now this README is the documentation.
 
 ## Working on it locally
 
-**Preview on staging.** Commit, push, then refresh and preview from your **Cloud portal** page. That
-is where your name, colours, logo and organization id are substituted into the pages, so it is the
-only place they look like what your customers get — and the only place sign-in works.
+**Branded, without committing anything — `sacli portal`.** This is the loop worth having. It serves
+your checkout the way SolarAssistant serves it: it reads `solar-assistant.json` and serves only the
+directory `root` names, resolves `/sign_in` to `sign_in.html`, substitutes your organization's name
+and colours into every page, serves `/assets/logo.svg` from your real stored logo, and reloads the
+browser as you save.
 
-You can also serve `dist/` yourself while working on layout, with any static server **that serves
-`/sign_in` as `sign_in.html`**. That requirement is easy to miss: `python3 -m http.server` does not
-do extensionless URLs, so `/` redirects to `/sign_in` and the first thing you see is a 404 that looks
-like a broken template.
+```bash
+sacli portal --org 42      # your organization id, needed once; later runs remember it
+```
 
-Expect it to look unbranded. Nothing substitutes tokens locally, so the tab reads `{{ org_name }}`,
-the colours fall back to the neutral palette in `dist/assets/style.css`, and sign-in cannot work
-because `organization-id` is still a token rather than a number. It shows you structure, not
-branding.
+The pages call the live API from the browser exactly as they do in production, so **sign-in works**
+— and so does everything else. Reads are your own organization's data, but a page that invites or
+removes a user is acting on real people, not a sandbox.
+
+`sacli` is [Solar-Assistant/sacli](https://github.com/Solar-Assistant/sacli); the portal command is
+documented in [docs/portal.md](https://github.com/Solar-Assistant/sacli/blob/main/docs/portal.md),
+including `--components` for pointing the pages at a checkout of the web components rather than the
+published bundle.
+
+**Preview what you have staged.** Commit, push, then refresh staging from your **Cloud portal**
+page and open the **Staging URL** shown there — `staging-<your-name>.solar-power.live`. It serves
+the revision you have staged, so you can look at a change before your customers do.
+
+**Or serve `dist/` with any static server**, if you only care about layout. It must serve
+`/sign_in` as `sign_in.html`: `python3 -m http.server` does not do extensionless URLs, so `/`
+redirects to `/sign_in` and the first thing you see is a 404 that looks like a broken template.
+Expect it to look unbranded — nothing substitutes tokens, so the tab reads `{{ org_name }}`, colours
+fall back to the neutral palette in `dist/assets/style.css`, and sign-in cannot work because
+`organization-id` is still a token rather than a number. It shows you structure, not branding.
 
 **If a page looks slate grey on your real portal, that is not a fault.** It means no primary colour
 is set on your organization yet — set one on your **Cloud portal** page and it appears. Grey is the
 honest default rather than a failure.
+
+## Staying up to date
+
+We keep releasing functionality into this template, and we would rather you took it than drifted.
+
+**Most of what we ship reaches you without you doing anything.** These pages are thin shells around
+the components, and those are loaded at runtime from `cdn.solar-assistant.io` rather than copied
+into your repository. When we improve what happens inside `<sa-sign-in>`, `<sa-sites>` or any of the
+others, your customers get it on their next page load and there is nothing to merge. Only changes to
+the HTML in this repository need pulling: a new page, a new component tag, a new token.
+
+When there is one, add us as a second remote and merge:
+
+```
+git remote add upstream https://github.com/Solar-Assistant/portal-minimal.git
+git fetch upstream
+git merge upstream/main --allow-unrelated-histories
+```
+
+**The first merge is unpleasant, and that is expected rather than a fault.** Because your repository
+was generated rather than forked, it begins at a single commit that shares no ancestry with ours.
+Git refuses outright without the flag:
+
+```
+fatal: refusing to merge unrelated histories
+```
+
+With the flag it proceeds, but git has no common ancestor to compare against, so it treats every
+file as added on both sides at once. If you have edited the pages, expect conflicts in most of them
+and work through them once.
+
+**It is bad exactly once.** That merge joins the two histories permanently. Every update after it is
+an ordinary merge against a real common ancestor, touching only what actually changed, and the
+`--allow-unrelated-histories` flag is never needed again. The whole cost is paid on the first pull,
+which is a good reason to do it early rather than after a year of changes.
 
 ## What it is built on
 
@@ -98,7 +156,7 @@ So `/sign_in` is `dist/sign_in.html`, and this README is not reachable on your p
 
 ## Tokens
 
-Four tokens are replaced, **in `.html` files only**:
+Six tokens are replaced, **in `.html` files only**:
 
 | Token | Becomes | Used for |
 |---|---|---|
@@ -106,6 +164,13 @@ Four tokens are replaced, **in `.html` files only**:
 | `{{ org_name }}` | the organization's name, HTML-escaped | page `<title>`, logo `alt` text |
 | `{{ org_primary }}` | its primary colour, or neutral slate if none is set | `--sa-primary` |
 | `{{ org_accent }}` | the same colour at 10% — a soft tint, derived for you | `--sa-accent` |
+| `{{ org_primary_dark }}` | the same, legible on a dark background | a dark-mode `--sa-primary` |
+| `{{ org_accent_dark }}` | that colour at 10% | a dark-mode `--sa-accent` |
+
+**The dark pair is always safe to use**, even for a company that has never set up a dark theme:
+the value falls back to a neutral legible on a dark background rather than rendering empty. These
+pages do not use them yet — there is no dark styling to attach them to — but if you add your own,
+they are there.
 
 An unknown token is left visible rather than blanked, so a typo shows up as `{{ org_nmae }}` on
 the page instead of silently rendering nothing. It also writes a warning to the server log on
@@ -198,17 +263,16 @@ already works.
 
 ## `assets/logo.svg`
 
-Referenced but **deliberately absent** from this repository. A logo differs for every company, and a shared
-template must not carry one. SolarAssistant serves that path from the organization's stored
-logo.
+Referenced but **deliberately absent** from this repository. A logo differs for every company, and a
+shared template must not carry one. SolarAssistant serves that path from your organization.
 
 Two consequences worth knowing:
 
 - **It is always SVG.** The stored logo is served as `image/svg+xml` whatever its filename, so
   the path stays `logo.svg`. Do not point it at a `.png`.
-- **A portal cannot be enabled without one.** There is no fallback and no placeholder — the
-  header expects an image at that path, so uploading a logo is part of setting a portal up
-  rather than something to do afterwards.
+- **You do not have to upload one.** If you have not, SolarAssistant generates a plain wordmark
+  from your organization's name in your primary colour, and that generated logo already switches
+  colour in a dark-mode browser. Uploading yours replaces it.
 
 `dist/assets/style.css` sizes it by height, so headers line up whatever shape you upload, with a
 `max-width` guard so that an unusually wide logo cannot crowd out the navigation.
