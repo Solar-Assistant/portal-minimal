@@ -31,20 +31,12 @@
   </header>
   <main>
     <h1>Privacy policy</h1>
-    <!-- The document itself is served by SolarAssistant on your own domain, so
-         nothing here leaves your site. The page around it is yours: change the
-         heading, add your header and footer, style it however you like. -->
-    <iframe class="legal" src="/api/v1/legal/portal/privacy" title="Privacy policy"></iframe>
+    <!-- The document is SolarAssistant's, fetched from solar-assistant.io and
+         injected here, so it inherits your page's typography. The page around
+         it is yours: change the heading, add your header and footer, style it
+         however you like. -->
+    <sa-legal document="privacy" organization-id="{{ org_id }}"></sa-legal>
   </main>
-  <script>
-    // Same-origin, so the frame can be sized to its content instead of scrolling.
-    const frame = document.querySelector('iframe.legal')
-    const fit = () => {
-      const doc = frame.contentDocument
-      if (doc) frame.style.height = doc.documentElement.scrollHeight + 'px'
-    }
-    frame.addEventListener('load', fit)
-    addEventListener('resize', fit)
-  </script>
+  <script type="module" src="https://cdn.solar-assistant.io/js/solar-assistant.js"></script>
 </body>
 </html>
